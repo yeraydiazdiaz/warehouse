@@ -1,0 +1,14 @@
+WAREHOUSE_ENV=development
+WAREHOUSE_TOKEN=insecuretoken
+AMQP_URL=amqp://guest@localhost:5672//
+DATABASE_URL=postgresql://postgres@localhost:5433/warehouse
+ELASTICSEARCH_URL=http://localhost:9200/development
+REDIS_URL=redis://localhost:6379/0
+SESSION_SECRET="aninsecuredevelopmentsecret"
+CAMO_URL="{request.scheme}://{request.domain}:9000/"
+CAMO_KEY="insecurecamokey"
+DOCS_URL="https://pythonhosted.org/{project}/"
+FILES_BACKEND="warehouse.packaging.services.LocalFileStorage path=/var/opt/warehouse/packages/ url=http://files.example.com/packages/{path}"
+RECAPTCHA_SITE_KEY="${RECAPTCHA_SITE_KEY}"
+RECAPTCHA_SECRET_KEY="${RECAPTCHA_SECRET_KEY}"
+STATUSPAGE_URL=https://2p66nmmycsj3.statuspage.io

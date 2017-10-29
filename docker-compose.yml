@@ -9,12 +9,18 @@ services:
 
   redis:
     image: redis:latest
+    ports:
+      - "6379:6379"
 
   rabbitmq:
     image: rabbitmq:latest
+    ports:
+      - "5672:5672"
 
   elasticsearch:
     image: elasticsearch:5
+    ports:
+      - "9200:9200"
 
   camo:
     image: pypa/warehouse-camo:latest
