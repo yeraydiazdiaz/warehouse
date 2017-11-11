@@ -24,6 +24,7 @@
 
 .form-group {
   margin-bottom: 20px;
+  position: relative;
 
   &__label {
     display: block;
@@ -81,6 +82,39 @@
           background-color: green;
         }
       }
+    }
+  }
+
+  .form-tooltip {
+    position: absolute;
+    border: 1px solid gray;
+    display: inline-block;
+    padding: .5em;
+    top: 115%;
+    background-color: #fff;
+    font-size: .8em;
+    text-align: left;
+    right: 46%;
+    z-index: 98;
+    max-width: 15em;
+
+    &:before {
+        content: "";
+        position: absolute;
+        top: -3px;
+        left: 2em;
+        height: 1em;
+        width: 1em;
+        background: #fff;
+        box-sizing: border-box;
+        transform: rotate(45deg) translate(-50%);
+        border-top: inherit;
+        border-left: inherit;
+        box-shadow: inherit;
+    }
+
+    .fa {
+      color: orange;
     }
   }
 }
