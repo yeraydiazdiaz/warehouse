@@ -52,6 +52,18 @@ export function submitTriggers() {
 
 /* global zxcvbn */
 
+const passwordStrengthValidator = (value) => {
+  const zxcvbnResult = zxcvbn(value);
+  return zxcvbnResult.score < 2
+    ? `Your password is too weak. ${zxcvbnResult.feedback.suggestions.join(' ')}`
+    : null;
+};
+
+const fieldRequiredValidator = (value) => {
+  return value === ""?
+    "Please fill out this field." : null;
+};
+
 const checkPasswordStrength = (event) => {
   let result = document.querySelector(".pw-strength-guage");
   if (event.target.value === "") {
@@ -65,8 +77,69 @@ const checkPasswordStrength = (event) => {
   }
 };
 
-export function passwordStrength() {
+const setupPasswordStrengthGauge = () => {
   let password = document.querySelector("#password");
   if (password === null) return;
-  password.addEventListener("input", checkPasswordStrength, false);
+  password.addEventListener(
+    "input",
+    checkPasswordStrength,
+    false
+  );
+};
+
+const createTooltip = (field, message) => {
+  let tooltip = document.createElement("div");
+  tooltip.setAttribute("class", "form-tooltip");
+  let rect = field.getBoundingClientRect();
+  tooltip.setAttribute("style", `top: ${rect.bottom + window.scrollY + 15}px; left: ${rect.right + window.scrollX - 150}px`);
+  let exclamationMark = `<i class="fa fa-exclamation-circle" aria-hidden="true"></i>${message}`;
+  tooltip.innerHTML = exclamationMark;
+
+  let form = document.querySelector("#content form");
+  form.appendChild(tooltip);
+};
+
+const removeTooltips = () => {
+  let tooltips = document.querySelectorAll(".form-tooltip");
+  for (let tooltip of tooltips) {
+    tooltip.parentNode.removeChild(tooltip);
+  }
+};
+
+const validateForm = (event) => {
+  removeTooltips();
+  let inputFields = document.querySelectorAll("input[required='required']");
+  for (let inputField of inputFields) {
+    let requiredMessage = fieldRequiredValidator(inputField.value);
+    if (requiredMessage !== null) {
+      createTooltip(inputField, requiredMessage);
+      event.preventDefault();
+      return;
+    }
+  }
+  
+  let password = document.querySelector("#password");
+  let passwordConfirm = document.querySelector("#password_confirm");
+  if (password.value !== passwordConfirm.value) {
+    let message = "The entered passwords do not match."
+    createTooltip(passwordConfirm, message);
+    event.preventDefault();
+    return;
+  }
+
+  let passwordStrengthMessage = passwordStrengthValidator(password.value);
+  if (passwordStrengthMessage !== null) {
+    createTooltip(password, passwordStrengthMessage);
+    event.preventDefault();
+    return;
+  }
+};
+
+export function registerFormValidation() {
+  if (document.querySelector("#password_confirm") === null) return;
+  setupPasswordStrengthGauge();
+  const submitButton = document.querySelector("#content input[type='submit']");
+  submitButton.addEventListener("click", validateForm, false);
+  const form = document.querySelector("#content form");
+  form.addEventListener("submit", validateForm, false);
 }
