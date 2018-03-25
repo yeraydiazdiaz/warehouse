@@ -33,16 +33,44 @@ export default class extends Controller {
     }
   }
 
-  initialize() {
+  get isSticky() {
+    return this.notificationTarget.parentNode.classList.contains("js-stick-to-top");
+  }
+
+  get shouldDisplay() {
     const notificationId = this._getNotificationId();
     const isDismissable = this.notificationTarget.classList.contains("notification-bar--dismissable");
 
     // Check if the target is dismissable, and if so:
     // * whether it has no notificationId (it's ephemeral)
     // * or it's not in localStorage (it hasn't been dismissed yet)
-    if (isDismissable && (!notificationId || !localStorage.getItem(notificationId))) {
+    return isDismissable && (!notificationId || !localStorage.getItem(notificationId));
+  }
+
+  initialize() {
+    if (this.shouldDisplay) {
       this.notificationTarget.classList.add("notification-bar--visible");
     }
+  }
+
+  connect() {
+    if (this.shouldDisplay && this.isSticky) {
+      this._placeAtTop();
+      window.addEventListener("resize", this._onResize);
+    }
+  }
+
+  _onResize() {
+    if (this.resizeTimer !== undefined)
+      clearInterval(this.resizeTimer);
+    this.resizeTimer = setTimeout(this._placeAtTop, 200);
+  }
+
+  _placeAtTop() {
+    console.log("place on top");
+    let height = this.notificationTarget.parentNode.offsetHeight;
+    let bodyElement = document.querySelector("body");
+    bodyElement.style.paddingTop = `${height}px`;
   }
 
   dismiss() {
@@ -51,5 +79,9 @@ export default class extends Controller {
       localStorage.setItem(notificationId, 1);
     }
     this.notificationTarget.classList.remove("notification-bar--visible");
+    if (this.isSticky) {
+      let bodyElement = document.querySelector("body");
+      bodyElement.style.paddingTop = "0px";
+    }
   }
 }

@@ -13,3 +13,8 @@
 -#}
 
 {# Note: The actual content for this include is defined in pypi-theme #}
+<div id="preproduction-warning" data-version="0" class="notification-bar notification-bar--danger notification-bar--dismissable" data-controller="notification" data-target="notification.notification">
+<button title="Dismiss this notification" data-target="notification.dismissButton" data-action="click->notification#dismiss" class="notification-bar__dismiss" aria-label="close"><i class="fa fa-times" aria-hidden="true"></i></button>
+<span class="notification-bar__icon"><i class="fa fa-exclamation-triangle"></i></span>
+<span class="notification-bar__message">This is a <a href="/help/#preproduction">pre-production</a> deployment of <a href="https://github.com/pypa/warehouse">Warehouse</a>. Changes made here affect the production instance of PyPI (pypi.python.org).</span>
+</div>

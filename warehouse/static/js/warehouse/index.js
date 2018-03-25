@@ -31,7 +31,6 @@ import enterView from "enter-view";
 import HTMLInclude from "warehouse/utils/html-include";
 import * as formUtils from "warehouse/utils/forms";
 import Clipboard from "clipboard";
-import PositionWarning from "warehouse/utils/position-warning";
 import Statuspage from "warehouse/utils/statuspage";
 import timeAgo from "warehouse/utils/timeago";
 import projectTabs from "warehouse/utils/project-tabs";
@@ -98,17 +97,14 @@ docReady(() => {
   });
 });
 
-// Position sticky bar
-docReady(PositionWarning);
-
-docReady(() => {
-  let resizeTimer;
-  const onResize = () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(PositionWarning, 200);
-  };
-  window.addEventListener("resize", onResize, false);
-});
+// docReady(() => {
+//   let resizeTimer;
+//   const onResize = () => {
+//     clearTimeout(resizeTimer);
+//     resizeTimer = setTimeout(PositionWarning, 200);
+//   };
+//   window.addEventListener("resize", onResize, false);
+// });
 
 docReady(() => {
   if (document.querySelector(".-js-autoplay-when-visible")) {
