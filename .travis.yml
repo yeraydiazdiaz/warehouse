@@ -40,6 +40,7 @@ script:
   - npm -v
   - ./node_modules/.bin/gulp dist
   - bin/tests --postgresql-host 127.0.0.1
+  - npm test
 
 matrix:
   include:
