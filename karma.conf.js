@@ -2,7 +2,7 @@ module.exports = function(config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: "",
+    basePath: "tests/frontend/",
     frameworks: ["mocha", "fixture", "sinon-chai"],
 
     files: [
@@ -15,17 +15,18 @@ module.exports = function(config) {
     ],
 
     webpack: {
-      mode: "development",
       module: {
-        rules: [
+        loaders: [
           {
             test: /\.js$/,
-            exclude: [
-              /node_modules/,
-            ],
-            use: [
-              { loader: "babel-loader" },
-            ],
+            exclude: /node_modules/,
+            use: {
+              loader: "babel-loader",
+              options: {
+                presets: ["env"],
+                plugins: ["transform-class-properties"],
+              },
+            },
           },
         ],
       },
@@ -40,17 +41,9 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      "src/index.js": ["webpack", "sourcemap"],
       "spec/*.js": [ "webpack", "sourcemap" ],
       "spec/fixtures/*.html": ["html2js"],
     },
-
-
-    // test results reporter to use
-    // possible values: "dots", "progress"
-    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    // reporters: ["progress"],
-
 
     // web server port
     port: 9876,
@@ -71,7 +64,7 @@ module.exports = function(config) {
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
 
-    browsers: ["ChromeHeadless"],
+    browsers: ["FirefoxHeadless"],
     reporters: ["mocha"],
     // if true, Karma captures browsers, runs the tests and exits
     singleRun: true,
