@@ -6,8 +6,8 @@
   },
   "scripts": {
     "test": "karma start",
-    "test:watch": "npm run test --auto-watch --no-single-run",
-    "test:browser": "npm run test:watch --browsers Chrome"
+    "test:watch": "karma start --auto-watch --no-single-run",
+    "test:browser": "karma start --browsers Firefox"
   },
   "dependencies": {
     "babel-core": "6.26.0",
