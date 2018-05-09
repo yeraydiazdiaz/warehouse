@@ -8,7 +8,7 @@ module.exports = function(config) {
     frameworks: ["mocha", "fixture", "sinon-chai"],
 
     files: [
-      {pattern: "spec/**/*_spec.js"},
+      "spec/**/*_spec.js",
       "spec/fixtures/*.html",
     ],
 

@@ -7,44 +7,47 @@ import chaiDom from "chai-dom";
 
 chai.use(chaiDom);
 
-before(function() {
-  registerApplication.call(this, "password", PasswordController);
-  this.sandbox = sinon.createSandbox();
-});
+describe("PasswordController", function() {
 
-afterEach(function() {
-  this.sandbox.restore();
-});
+  before(function() {
+    registerApplication.call(this, "password", PasswordController);
+    this.sandbox = sinon.createSandbox();
+  });
 
-describe("initial state", function() {
-  context("the show password checkbox", function() {
-    it("is off", function() {
-      expect(this.controller.showPasswordTarget.checked).to.be.false;
+  afterEach(function() {
+    this.sandbox.restore();
+  });
+
+  describe("initial state", function() {
+    context("the show password checkbox", function() {
+      it("is off", function() {
+        expect(this.controller.showPasswordTarget.checked).to.be.false;
+      });
     });
   });
-});
 
-describe("initial state", function() {
-  context("clicking show password", function() {
-    it("toggles password fields", function() {
-      let passwordField = fixture.el.querySelector("#password");
-      let confirmField = fixture.el.querySelector("#confirm");
-      expect(passwordField).to.have.attr("type").equal("password");
-      expect(confirmField).to.have.attr("type").equal("password");
+  describe("functionality", function() {
+    context("clicking show password", function() {
+      it("toggles password fields", function() {
+        let passwordField = fixture.el.querySelector("#password");
+        let confirmField = fixture.el.querySelector("#confirm");
+        expect(passwordField).to.have.attr("type").equal("password");
+        expect(confirmField).to.have.attr("type").equal("password");
 
-      // simulate clicking on checkbox
-      this.controller.showPasswordTarget.checked = true;
-      this.controller.togglePasswords();
+        // simulate clicking on checkbox
+        this.controller.showPasswordTarget.checked = true;
+        this.controller.togglePasswords();
 
-      expect(passwordField).to.have.attr("type").equal("text");
-      expect(confirmField).to.have.attr("type").equal("text");
+        expect(passwordField).to.have.attr("type").equal("text");
+        expect(confirmField).to.have.attr("type").equal("text");
 
-      // simulate clicking on checkbox
-      this.controller.showPasswordTarget.checked = false;
-      this.controller.togglePasswords();
+        // simulate clicking on checkbox
+        this.controller.showPasswordTarget.checked = false;
+        this.controller.togglePasswords();
 
-      expect(passwordField).to.have.attr("type").equal("password");
-      expect(confirmField).to.have.attr("type").equal("password");
+        expect(passwordField).to.have.attr("type").equal("password");
+        expect(confirmField).to.have.attr("type").equal("password");
+      });
     });
   });
 });
