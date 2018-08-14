@@ -38,20 +38,25 @@ export default class extends Controller {
     const notificationId = this._getNotificationId();
     const isDismissable = this.notificationTarget.classList.contains("notification-bar--dismissable");
 
-    // Check if the target is dismissable, and if so:
-    // * whether it has no notificationId (it's ephemeral)
-    // * or it's not in localStorage (it hasn't been dismissed yet)
-    if (!notificationId || (isDismissable && !localStorage.getItem(notificationId))) {
+    // Show the notification if:
+    // - the notification is ephemeral, i.e. it has no notification ID
+    // - it's not ephemeral and is not dismissable
+    // - it's not ephemeral, is dismissable and the user has not dismissed it yet
+    if (!notificationId || !isDismissable || (isDismissable && !localStorage.getItem(notificationId))) {
       this.notificationTarget.classList.add("notification-bar--visible");
     }
   }
 
   dismiss() {
-    const notificationId = this._getNotificationId();
-    if (notificationId) {
-      localStorage.setItem(notificationId, 1);
+    const isDismissable = this.notificationTarget.classList.contains("notification-bar--dismissable");
+    console.log(isDismissable)
+    if (isDismissable) {
+      const notificationId = this._getNotificationId();
+      if (notificationId) {
+        localStorage.setItem(notificationId, 1);
+      }
+      this.notificationTarget.classList.remove("notification-bar--visible");
+      positionWarning();
     }
-    this.notificationTarget.classList.remove("notification-bar--visible");
-    positionWarning();
   }
 }

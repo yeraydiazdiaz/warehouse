@@ -37,65 +37,143 @@ describe("NotificationController", function() {
     this.sandbox.restore();
   });
 
-  describe("standard notifications", function() {
+  describe("dismissable", function() {
 
-    before(function() {
-      // standard notifications have an ID
-      this.controller.element.id = "notification-id";
-    });
+    describe("standard notifications", function() {
 
-    context("initial state", function() {
-      context("when not present in localStorage", function() {
-        it("are visible", function() {
-          localStorage.removeItem(this.controller._getNotificationId());
-          this.controller.initialize();
-          expect(this.controller.notificationTarget).to.have.class("notification-bar--visible");
+      before(function() {
+        // standard notifications have an ID
+        this.controller.element.id = "notification-id";
+      });
+
+      context("initial state", function() {
+        context("when not present in localStorage", function() {
+          it("are visible", function() {
+            localStorage.removeItem(this.controller._getNotificationId());
+            this.controller.initialize();
+            expect(this.controller.notificationTarget).to.have.class("notification-bar--visible");
+          });
+        });
+
+        context("when present in localStorage", function() {
+          it("are not visible", function() {
+            localStorage.setItem(this.controller._getNotificationId(), 1);
+            this.controller.initialize();
+            expect(this.controller.notificationTarget).to.not.have.class("notification-bar--visible");
+          });
         });
       });
 
-      context("when present in localStorage", function() {
-        it("are not visible", function() {
-          localStorage.setItem(this.controller._getNotificationId(), 1);
-          this.controller.initialize();
-          expect(this.controller.notificationTarget).to.not.have.class("notification-bar--visible");
-        });
+      it("can be dismissed", function() {
+        this.controller.dismiss();
+        expect(this.controller.notificationTarget).to.not.have.class("notification-bar--visible");
       });
     });
 
-    it("can be dismissed", function() {
-      this.controller.dismiss();
-      expect(this.controller.notificationTarget).to.not.have.class("notification-bar--visible");
+    describe("ephemeral notifications", function() {
+
+      before(function() {
+        // ephemeral notifications have no ID
+        this.controller.element.removeAttribute("id");
+      });
+
+      context("initial state", function() {
+        context("when not present in localStorage", function() {
+          it("are visible", function() {
+            localStorage.removeItem(this.controller._getNotificationId());
+            this.controller.initialize();
+            expect(this.controller.notificationTarget).to.have.class("notification-bar--visible");
+          });
+        });
+
+        context("when present in localStorage", function() {
+          it("are not visible", function() {
+            localStorage.setItem(this.controller._getNotificationId(), 1);
+            this.controller.initialize();
+            expect(this.controller.notificationTarget).to.have.class("notification-bar--visible");
+          });
+        });
+      });
+
+      it("can be dismissed", function() {
+        this.controller.dismiss();
+        expect(this.controller.notificationTarget).to.not.have.class("notification-bar--visible");
+      });
+
     });
+
   });
 
-  describe("ephemeral notifications", function() {
-
+  describe("non dismissable", function() {
     before(function() {
-      // ephemeral notifications have no ID
-      this.controller.element.removeAttribute("id");
+      console.log(this.controller.element.classList);
+      this.controller.element.classList.remove("notification-bar--dismissable");
+      console.log(this.controller.element.classList);
     });
 
-    context("initial state", function() {
-      context("when not present in localStorage", function() {
-        it("are visible", function() {
-          localStorage.removeItem(this.controller._getNotificationId());
-          this.controller.initialize();
-          expect(this.controller.notificationTarget).to.have.class("notification-bar--visible");
+    describe("standard notifications", function() {
+
+      before(function() {
+        // standard notifications have an ID
+        this.controller.element.id = "notification-id";
+      });
+
+      context("initial state", function() {
+        context("when not present in localStorage", function() {
+          it("are visible", function() {
+            localStorage.removeItem(this.controller._getNotificationId());
+            this.controller.initialize();
+            expect(this.controller.notificationTarget).to.have.class("notification-bar--visible");
+          });
+        });
+
+        context("when present in localStorage", function() {
+          it("are not visible", function() {
+            localStorage.setItem(this.controller._getNotificationId(), 1);
+            this.controller.initialize();
+            expect(this.controller.notificationTarget).to.have.class("notification-bar--visible");
+          });
         });
       });
 
-      context("when present in localStorage", function() {
-        it("are not visible", function() {
-          localStorage.setItem(this.controller._getNotificationId(), 1);
-          this.controller.initialize();
-          expect(this.controller.notificationTarget).to.have.class("notification-bar--visible");
-        });
+      it("cannot be dismissed", function() {
+        this.controller.initialize();
+        this.controller.dismiss();
+        expect(this.controller.notificationTarget).to.have.class("notification-bar--visible");
       });
     });
 
-    it("can be dismissed", function() {
-      this.controller.dismiss();
-      expect(this.controller.notificationTarget).to.not.have.class("notification-bar--visible");
+    describe("ephemeral notifications", function() {
+
+      before(function() {
+        // ephemeral notifications have no ID
+        this.controller.element.removeAttribute("id");
+      });
+
+      context("initial state", function() {
+        context("when not present in localStorage", function() {
+          it("are visible", function() {
+            localStorage.removeItem(this.controller._getNotificationId());
+            this.controller.initialize();
+            expect(this.controller.notificationTarget).to.have.class("notification-bar--visible");
+          });
+        });
+
+        context("when present in localStorage", function() {
+          it("are not visible", function() {
+            localStorage.setItem(this.controller._getNotificationId(), 1);
+            this.controller.initialize();
+            expect(this.controller.notificationTarget).to.have.class("notification-bar--visible");
+          });
+        });
+      });
+
+      it("cannot be dismissed", function() {
+        this.controller.initialize();
+        this.controller.dismiss();
+        expect(this.controller.notificationTarget).to.have.class("notification-bar--visible");
+      });
+
     });
 
   });
