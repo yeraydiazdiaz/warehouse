@@ -43,6 +43,17 @@ module.exports = function(config) {
               },
             },
           },
+          {
+            test: /warehouse\/static\/js\/warehouse\/.+\.js$/,
+            enforce: "post",
+            exclude: /node_modules/,
+            use: {
+              loader: "istanbul-instrumenter-loader",
+              options: {
+                esModules: true,
+              },
+            },
+          },
         ],
       },
     },
@@ -56,7 +67,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      "spec/*.js": [ "webpack", "sourcemap" ],
+      "spec/*.js": ["webpack", "sourcemap"],
       "spec/fixtures/*.html": ["html2js"],
     },
 
@@ -80,7 +91,7 @@ module.exports = function(config) {
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
 
     browsers: ["FirefoxHeadless"],
-    reporters: ["mocha"],
+    reporters: ["mocha", "coverage-istanbul"],
     // if true, Karma captures browsers, runs the tests and exits
     singleRun: true,
 
@@ -92,5 +103,12 @@ module.exports = function(config) {
     browserDisconnectTimeout: 180000,
     browserDisconnectTolerance: 3,
     browserNoActivityTimeout: 300000,
+
+    coverageIstanbulReporter: {
+      reports: [ "text", "html" ],
+      dir: "static_htmlcov",
+      fixWebpackSourcePaths: true,
+    },
+
   });
 };
