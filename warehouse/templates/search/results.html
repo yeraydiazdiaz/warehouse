@@ -164,6 +164,7 @@
             <label for="order">Order by &nbsp;</label>
             <select class="-js-form-submit-trigger" id="order" name="o">
               {{ search_option("Relevance", "") }}
+              {{ search_option("Popularity", "-downloads_month_to_date") }}
               {{ search_option("Date last updated", "-created") }}
             </select>
             {% endif %}
