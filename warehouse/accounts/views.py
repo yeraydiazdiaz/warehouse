@@ -480,3 +480,26 @@ def profile_callout(user, request):
 )
 def edit_profile_button(user, request):
     return {"user": user}
+
+
+@view_config(
+    route_name="accounts.validate-email.json",
+    renderer="json",
+    accept="application/json",
+    # TODO: xhr=True
+)
+def validate_email(request):
+    email = request.params.get("email")
+    if email is None:
+        request.response.status = 400
+        return dict(success=False, reason="Missing email argument")
+
+    user_service = request.find_service(IUserService, context=None)
+    if user_service.find_userid_by_email(email) is not None:
+        msg = (
+            "This email address is already being used by another account. "
+            "Use a different email."
+        )
+        return dict(success=False, reason=msg)
+    else:
+        return dict(success=True)

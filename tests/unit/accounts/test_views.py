@@ -1021,3 +1021,16 @@ class TestEditProfileButton:
         request = pretend.stub()
 
         assert views.edit_profile_button(user, request) == {"user": user}
+
+
+class TestValidateEmail:
+    def test_validate_email_not_registered(self, db_request):
+        db_request.params = {"email": "foo@example.com"}
+        db_request.find_service = lambda *a, **kw: pretend.stub(
+            find_userid_by_email=lambda *a, **kw: None
+        )
+
+        response = views.validate_email(db_request)
+
+        assert response["success"] is True
+
